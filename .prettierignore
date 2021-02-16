@@ -1,0 +1,6 @@
+*.yaml
+*.yml
+*.md
+build/
+docs/typedoc
+coverage/
