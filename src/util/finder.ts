@@ -3,8 +3,8 @@ import * as fs from 'fs'
 const exts = ['ai', 'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'heic', 'heif', 'svg', 'tif', 'tiff']
 
 const isMedia = (pathName: string): boolean => {
-  const ext = pathName.split('.').pop()
-  return exts.indexOf(ext!) > -1
+  const ext = pathName.split('.').pop() || ''
+  return exts.indexOf(ext) > -1
 }
 
 const getAllMedia = (path: string, arrayOfFiles: string[] = []): string[] => {

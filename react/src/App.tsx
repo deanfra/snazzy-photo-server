@@ -1,56 +1,47 @@
-import styled from "@emotion/styled";
-import React, { useState, useEffect } from "react";
-import Header from "./components/Header";
+import styled from '@emotion/styled'
+import React, { useState, useEffect } from 'react'
+import Header from './components/Header'
+import ImageTile from './components/ImageTile'
+import Lightbox from './components/Lightbox'
+import Loader from './components/Loader'
+import { Image } from './interfaces'
 
-export interface Props {
-  customText?: string;
-}
-
-type Image = {
-  id: string;
-  path: string;
-  thumb: string;
-};
-
-const App = ({ customText }: Props): JSX.Element => {
-  const [images, setImages] = useState([]);
+const App = (): JSX.Element => {
+  const [images, setImages] = useState<Image[]>([])
+  const [showLightbox, setShowLightBox] = useState<boolean>(false)
+  const [selectedImage, setSelectedImage] = useState<Image>()
 
   useEffect(() => {
-    fetch("/images")
+    fetch('/images')
       .then((res) => res.json())
-      .then(setImages);
-  }, []);
+      .then(setImages)
+  }, [])
+
+  useEffect(() => {
+    if (selectedImage) {
+      setShowLightBox(true)
+    }
+  }, [selectedImage])
+
+  useEffect(() => {
+    if (!showLightbox) {
+      setSelectedImage(undefined)
+    }
+  }, [showLightbox])
 
   return (
     <div>
       <Header />
-      {!images.length ? (
-        <div>loading...</div>
-      ) : (
-        <div>
-          <Tiles>
-            {images.map((image: Image) => (
-              <Tile key={image.id}>
-                <a href={image.path}>
-                  <img src={image.thumb} />
-                </a>
-              </Tile>
-            ))}
-          </Tiles>
-        </div>
-      )}
+      <Lightbox show={showLightbox} image={selectedImage} toggle={setShowLightBox} />
+      {!images.length ? <Loader /> : <Tiles>{images.map((image) => ImageTile({ image, setSelectedImage }))}</Tiles>}
     </div>
-  );
-};
+  )
+}
 
-const Tile = styled("div")`
-  margin: 20px;
-`;
-
-const Tiles = styled("div")`
+const Tiles = styled('div')`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-`;
+`
 
-export default App;
+export default App

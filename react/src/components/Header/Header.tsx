@@ -1,14 +1,10 @@
-import React from "react";
-import styled from "@emotion/styled";
+import React from 'react'
+import styled from '@emotion/styled'
 
-type Props = {
-  customText?: string;
-};
+const Header = (): JSX.Element => <Head>Here&rsquo;s your damn photo server (∩｀-´)⊃━☆ﾟ.*･｡ﾟ 🌠</Head>
 
-export default (props: Props): JSX.Element => (
-  <Header>Here's your damn photo server (∩｀-´)⊃━☆ﾟ.*･｡ﾟ 🌠</Header>
-);
+export default Header
 
-const Header = styled("div")`
+const Head = styled('div')`
   padding: 20px 20px 0;
-`;
+`
