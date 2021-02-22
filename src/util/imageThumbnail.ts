@@ -1,13 +1,12 @@
 import sharp from 'sharp'
 import * as fs from 'fs'
 import * as path from 'path'
-import { deterministicUUID, uuidPrefixed } from './uuid'
+import { uuidPrefixed } from './uuid'
 
-type ImageProps = { uuid: string; pathName: string; thumbPathName: string }
+type ImageProps = { base: string; path: string; file: Buffer; uuid: string; exif: any; meta: any }
+type ImageWithThumb = ImageProps & { thumb: string }
 
-const makeThumbnail = (pathName: string): ImageProps => {
-  const file = fs.readFileSync(pathName)
-  const uuid = deterministicUUID(file)
+const makeThumbnail = ({ uuid, file, ...rest }: ImageProps): ImageWithThumb => {
   const [uuidPrefix, uuidRest] = uuidPrefixed(uuid)
 
   const thumbPath = path.join(__dirname, '../thumbnails/')
@@ -30,7 +29,7 @@ const makeThumbnail = (pathName: string): ImageProps => {
       }
     })
 
-  return { uuid, pathName, thumbPathName: '../thumbnails/' + thumbPathName }
+  return { uuid, file, thumb: '../thumbnails/' + thumbPathName, ...rest }
 }
 
 export default makeThumbnail

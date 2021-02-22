@@ -1,15 +1,25 @@
-import getAllMedia from './util/finder'
-import makeThumbnail from './util/thumbnails'
-import { insertPhoto } from './models/photo'
+import findAllImages from './util/imageFinder'
+import makeThumbnail from './util/imageThumbnail'
+import { insertPhoto } from './models/image'
+import getImageUuids from './util/imageUuid'
+import getImageMeta from './util/imageMeta'
 
 const dir = process.env['BASE_IMG_DIR'] || ''
 
 const build = () => {
-  console.log('⚡︎', 'processing pictures in:', dir)
-  const allMedia = getAllMedia(dir)
-  const thumbs = allMedia.map(makeThumbnail)
-  thumbs.map(({ uuid, pathName, thumbPathName }) => insertPhoto(dir, uuid, pathName, thumbPathName))
-  console.log('⚡︎', thumbs.length, 'pictures processed')
+  console.log('🛠  Processing pictures in:', dir || '(no directory)')
+
+  if (!dir) {
+    console.error(
+      '\n⚠️  Please configure a base directory for your images:\n   $ export BASE_IMG_DIR=/path/to/folder\n'
+    )
+    return
+  }
+
+  const processed = findAllImages(dir).map(async (image) => {
+    await Promise.resolve(image).then(getImageUuids).then(getImageMeta).then(makeThumbnail).then(insertPhoto)
+  })
+  console.log('⚡︎', processed.length, 'pictures processing')
 }
 
 build()
