@@ -14,6 +14,7 @@ app.get('/images', (req, res) => {
 
 app.use('/', express.static(path.join(__dirname, '../static')))
 app.use('/thumbnails', express.static(path.join(__dirname, '../src/thumbnails')))
+console.log('serving images from:', dir)
 app.use('/images', express.static(dir))
 app.use('/image/:id', async (req, res) => {
   const photo = await fetchPhoto(req.params.id, dir)

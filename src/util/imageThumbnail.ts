@@ -2,11 +2,12 @@ import sharp from 'sharp'
 import * as fs from 'fs'
 import * as path from 'path'
 import { uuidPrefixed } from './uuid'
+import ImageExif from '../interfaces/ImageExif'
 
-type ImageProps = { base: string; path: string; file: Buffer; uuid: string; exif: any; meta: any }
+type ImageProps = { base: string; path: string; file: Buffer; uuid: string; exif: ImageExif }
 type ImageWithThumb = ImageProps & { thumb: string }
 
-const makeThumbnail = ({ uuid, file, ...rest }: ImageProps): ImageWithThumb => {
+const imageThumbnail = ({ uuid, file, ...rest }: ImageProps): ImageWithThumb => {
   const [uuidPrefix, uuidRest] = uuidPrefixed(uuid)
 
   const thumbPath = path.join(__dirname, '../thumbnails/')
@@ -32,4 +33,4 @@ const makeThumbnail = ({ uuid, file, ...rest }: ImageProps): ImageWithThumb => {
   return { uuid, file, thumb: '../thumbnails/' + thumbPathName, ...rest }
 }
 
-export default makeThumbnail
+export default imageThumbnail

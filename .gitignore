@@ -11,3 +11,4 @@ logs
 thumbnails
 db.json
 static/
+coverage

@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import imageReader from './imageReader'
 
 const extensions = ['ai', 'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'heic', 'heif', 'svg', 'tif', 'tiff']
 
@@ -10,19 +11,24 @@ const isImage = (path: string): boolean => {
 type Image = { base: string; path: string; file: Buffer }
 
 const findAllImages = (basePath: string, arrayOfFiles: Image[] = []): Image[] => {
-  fs.readdirSync(basePath).forEach((filePath) => {
-    const isDirectory = fs.statSync(basePath + '/' + filePath).isDirectory()
-    const fullImagePath = basePath + '/' + filePath
+  const originalDirectory = basePath
 
-    if (isDirectory) {
-      arrayOfFiles = findAllImages(basePath + '/' + filePath, arrayOfFiles)
-    } else if (isImage(fullImagePath)) {
-      const file = fs.readFileSync(fullImagePath)
-      arrayOfFiles.push({ base: basePath, path: fullImagePath, file })
-    }
-  })
+  const findAllIn = (basePath: string, arrayOfFiles: Image[] = []): Image[] => {
+    fs.readdirSync(basePath).forEach((filePath) => {
+      const isDirectory = fs.statSync(basePath + '/' + filePath).isDirectory()
+      const fullImagePath = basePath + '/' + filePath
 
-  return arrayOfFiles
+      if (isDirectory) {
+        arrayOfFiles = findAllIn(basePath + '/' + filePath, arrayOfFiles)
+      } else if (isImage(fullImagePath)) {
+        const file = imageReader(fullImagePath)
+        arrayOfFiles.push({ base: originalDirectory, path: fullImagePath, file })
+      }
+    })
+    return arrayOfFiles
+  }
+
+  return findAllIn(basePath, arrayOfFiles)
 }
 
 export default findAllImages

@@ -1,10 +1,10 @@
 import React from 'react'
 
 type Props = {
-  color: string;
+  color: string
 }
 
-const CloseIcon = ({color}: Props): JSX.Element => (
+const CloseIcon = ({ color }: Props): JSX.Element => (
   <svg
     viewBox="0 0 24 24"
     width="24"

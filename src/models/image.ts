@@ -1,7 +1,9 @@
 import low from 'lowdb'
 import FileSync from 'lowdb/adapters/FileSync'
-import Image from '../interfaces/image'
+import ImageExif from '../interfaces/ImageExif'
+import ImageRow from '../interfaces/ImageRow'
 
+// Extract to a helper
 const db = low(new FileSync('./src/models/db.json')).defaults({
   folders: [],
   photos: [],
@@ -11,23 +13,22 @@ const db = low(new FileSync('./src/models/db.json')).defaults({
 
 const model = () => db.get('photos')
 
-type ImageProps = { base: string; path: string; file: Buffer; uuid: string; thumb: string; exif: any; meta: any }
+type ImageProps = { base: string; path: string; file: Buffer; uuid: string; thumb: string; exif: ImageExif }
 
-export const insertPhoto = async ({ base, uuid, path, thumb }: ImageProps): Promise<void> => {
+export const insertPhoto = async ({ base, uuid, path, thumb }: ImageProps): Promise<ImageRow> => {
   const handle = model()
   const relativePath = path.replace(base, '/images')
-  const data = { id: uuid, path: relativePath, thumb }
+  const data: ImageRow = { id: uuid, path: relativePath, thumb }
+  let image
 
   if (!fetchPhotoById(uuid)) {
-    await handle.push(data).write()
+    image = await handle.push(data).write()
   } else {
-    await handle.find({ id: uuid }).assign(data).write()
+    image = await handle.find({ id: uuid }).assign(data).write()
   }
 
-  // if (!fetchPhotoById(uuid)) {
-  //   model().push({ id: uuid, path, thumb }).write()
-  // }
+  return image
 }
-export const fetchPhotos = () => model().value()
-export const fetchPhotoById = (id: string): Promise<Image> => model().find({ id }).value()
-export const fetchPhotoByPath = (path: string): Promise<Image> => model().find({ path }).value()
+export const fetchPhotos = (): Promise<ImageRow[]> => model().value()
+export const fetchPhotoById = (id: string): Promise<ImageRow> => model().find({ id }).value()
+export const fetchPhotoByPath = (path: string): Promise<ImageRow> => model().find({ path }).value()

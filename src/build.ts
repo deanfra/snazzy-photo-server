@@ -2,11 +2,11 @@ import findAllImages from './util/imageFinder'
 import makeThumbnail from './util/imageThumbnail'
 import { insertPhoto } from './models/image'
 import getImageUuids from './util/imageUuid'
-import getImageMeta from './util/imageMeta'
+import getImageExif from './util/imageExif'
 
 const dir = process.env['BASE_IMG_DIR'] || ''
 
-const build = () => {
+const build = async () => {
   console.log('🛠  Processing pictures in:', dir || '(no directory)')
 
   if (!dir) {
@@ -16,10 +16,30 @@ const build = () => {
     return
   }
 
-  const processed = findAllImages(dir).map(async (image) => {
-    await Promise.resolve(image).then(getImageUuids).then(getImageMeta).then(makeThumbnail).then(insertPhoto)
+  console.time('build')
+
+  console.time('find')
+  const all = findAllImages(dir)
+  console.timeEnd('find')
+  console.time('uuids')
+  const uuids = all.map(getImageUuids)
+  console.timeEnd('uuids')
+  console.time('exif')
+  const exif = await Promise.all(uuids.map(getImageExif))
+  console.timeEnd('exif')
+  console.time('thumbs')
+  const thumbs = exif.map(makeThumbnail)
+  console.timeEnd('thumbs')
+  console.time('insert')
+  const inserts = Promise.all(thumbs.map(insertPhoto)).then(() => {
+    console.timeEnd('insert')
+    console.timeEnd('build')
   })
-  console.log('⚡︎', processed.length, 'pictures processing')
+
+  // const processed = findAllImages(dir).map(async (image) => {
+  //   await Promise.resolve(image).then(getImageUuids).then(getImageMeta).then(makeThumbnail).then(insertPhoto)
+  // })
+  // console.log('⚡︎', inserts.length, 'pictures processing')
 }
 
 build()

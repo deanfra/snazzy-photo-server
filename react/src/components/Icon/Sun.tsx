@@ -1,20 +1,20 @@
 import React from 'react'
 
 type Props = {
-  color: string;
+  color: string
 }
 
-const Sun = ({color}: Props): JSX.Element =>
- (
-  <svg 
+const Sun = ({ color }: Props): JSX.Element => (
+  <svg
     viewBox="0 0 24 24"
-    width="24" 
+    width="24"
     height="24"
     stroke={color}
-    stroke-width="2"
+    strokeWidth="2"
     fill="none"
-    stroke-linecap="round"
-    stroke-linejoin="round">
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="12" cy="12" r="5"></circle>
     <line x1="12" y1="1" x2="12" y2="3"></line>
     <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -26,7 +26,5 @@ const Sun = ({color}: Props): JSX.Element =>
     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
   </svg>
 )
-
-
 
 export default Sun
