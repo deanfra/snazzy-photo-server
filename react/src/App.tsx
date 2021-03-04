@@ -11,6 +11,32 @@ const App = (): JSX.Element => {
   const [showLightbox, setShowLightBox] = useState<boolean>(false)
   const [selectedImage, setSelectedImage] = useState<Image>()
 
+  const w = window as any
+  w.onkeyup = (({code}: KeyboardEvent) => {
+    switch (code) {
+      case 'ArrowRight':
+        nextImage(images, 1, selectedImage)
+        break;
+      case 'ArrowLeft':
+        nextImage(images, -1, selectedImage)
+        break;
+      case 'Escape':
+        setShowLightBox(false);
+        break;
+    }
+  })
+
+  const nextImage = (images: Image[], increment:number, selectedImage?: Image): void => {
+    if(selectedImage) {
+      setSelectedImage(imageIncrement(increment, selectedImage, images))
+    }
+  }
+
+  const imageIncrement = (increment: number, selectedImage: Image, images: Image[]): Image => {
+    const currentIndex = images.indexOf(selectedImage)
+    return images[currentIndex + increment] || images[currentIndex]
+  }
+
   useEffect(() => {
     fetch('/images')
       .then((res) => res.json())
