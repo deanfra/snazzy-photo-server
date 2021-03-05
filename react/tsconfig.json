@@ -9,7 +9,8 @@
     "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
-    "rootDir": "/",
+    "rootDir": "../",
+    "baseUrl": ".",
     "esModuleInterop": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -17,7 +18,11 @@
     "removeComments": true,
     "strictNullChecks": true,
     "skipLibCheck": true,
-    "types": ["@emotion/core", "@types/jest"]
+    "types": ["@emotion/core", "@types/jest"],
+    "paths": {
+      "components/*": ["src/components/*"],
+      "interfaces/*": ["../src/interfaces/*"]
+    }
   },
   "typeRoots": ["node_modules/@types", "@types", "./src/custom.d.ts"],
   "includes": ["src/**/*.ts", "src/**/*.tsx"],

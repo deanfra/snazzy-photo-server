@@ -5,13 +5,20 @@ const SRC_PATH = `${CONTEXT_PATH}/src`
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const NODE_ENV = process.env.NODE_ENV || 'development'
 
 module.exports = {
-  mode: 'development',
+  mode: NODE_ENV,
   devtool: 'eval-source-map', // Enable sourcemaps for debugging webpack's output.
-  context: CONTEXT_PATH,
   entry: `${SRC_PATH}/index.tsx`,
-  resolve: { extensions: ['.ts', '.tsx', '.js', '.jsx'] },
+  context: CONTEXT_PATH, // ForkTsCheckerWebpackPlugin to automatically find tsconfig.json
+  resolve: {
+    alias: {
+      components: path.resolve(__dirname, './src/components/'), // synced with tsconfig paths
+      interfaces: path.resolve(__dirname, '../src/interfaces/'), // synced with tsconfig paths
+    },
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+  },
   output: {
     path: DIST_PATH,
     publicPath: '/',

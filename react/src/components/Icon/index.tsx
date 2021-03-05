@@ -1,5 +1,5 @@
 import React from 'react'
-import theme from '../theme'
+import theme from 'components/theme'
 import CloseIcon from './Close'
 import SunIcon from './Sun'
 

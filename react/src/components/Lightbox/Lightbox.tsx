@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Image } from '../../interfaces'
-import Button from '../Button'
-import Flex from '../Flex'
-import Icon from '../Icon/'
-import Sidebar from './components/Sidebar'
 import styled from '@emotion/styled'
-import theme from '../theme'
-import Loader from '../Loader'
+import Button from 'components/Button'
+import Flex from 'components/Flex'
+import Icon from 'components/Icon/'
+import Image from 'interfaces/Image'
+import Loader from 'components/Loader'
+import Sidebar from './components/Sidebar'
+import SidebarExif from './components/SidebarExif'
+import theme from 'components/theme'
 
 type Props = {
   image?: Image
@@ -15,13 +16,14 @@ type Props = {
 }
 const Lightbox = ({ image, show, toggle }: Props): JSX.Element => {
   const [loading, setLoading] = useState(true)
+  const [imageDetails, setImageDetails] = useState<Image>()
 
   useEffect(() => {
     if (image) {
       setLoading(true)
       fetch(`/image/${image.id}`)
         .then((res) => res.json())
-        .then((res) => console.log(res))
+        .then((res: Image) => setImageDetails(res))
         .finally(() => { setLoading(false) })
     }
   }, [image])
@@ -38,7 +40,12 @@ const Lightbox = ({ image, show, toggle }: Props): JSX.Element => {
               <Icon type="close" />
             </Button>
           </Flex>
-          <Flex>{image ? image.path.replace('/images/', '') : ''}</Flex>
+          {imageDetails ? (
+            <>
+              <Flex>{imageDetails.path.replace('/images/', '')}</Flex>
+              <SidebarExif exif={imageDetails.exif} />
+            </>
+          ) : <p/>}
         </Sidebar>
       </Flex>
     </Wrapper>

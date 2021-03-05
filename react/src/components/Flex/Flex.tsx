@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 
 type Props = {
   align?: string
-  children: JSX.Element | JSX.Element[] | string | string[]
+  children: JSX.Element | JSX.Element[] | string | string[] | null
   direction?: string
   flex?: string
   grow?: boolean

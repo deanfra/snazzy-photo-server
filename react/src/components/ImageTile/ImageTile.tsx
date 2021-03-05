@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { Image } from '../../interfaces'
+import Image from 'interfaces/Image'
 
 type Props = {
   image: Image

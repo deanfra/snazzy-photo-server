@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import Flex from '../../../Flex'
+import Flex from 'components/Flex'
 
 type Props = {
   children: JSX.Element | JSX.Element[]

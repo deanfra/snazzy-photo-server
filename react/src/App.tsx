@@ -1,10 +1,10 @@
-import styled from '@emotion/styled'
 import React, { useState, useEffect } from 'react'
-import Header from './components/Header'
-import ImageTile from './components/ImageTile'
-import Lightbox from './components/Lightbox'
-import Loader from './components/Loader'
-import { Image } from './interfaces'
+import styled from '@emotion/styled'
+import Header from 'components/Header'
+import ImageTile from 'components/ImageTile'
+import Lightbox from 'components/Lightbox'
+import Loader from 'components/Loader'
+import Image from 'interfaces/Image'
 
 const App = (): JSX.Element => {
   const [images, setImages] = useState<Image[]>([])
