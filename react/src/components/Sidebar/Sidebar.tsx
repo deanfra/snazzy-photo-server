@@ -47,5 +47,4 @@ const StyledSidebarInner = styled(Flex)`
   width: 20rem;
   overflow-y: auto;
   z-index: 3;
-
 `

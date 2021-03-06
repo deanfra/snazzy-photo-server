@@ -23,6 +23,7 @@ const StyledExifList = styled(Flex)`
   padding: 1rem 1.2rem;
   font-size: 0.8rem;
 `
+
 const StyledExif = styled('p')`
   margin: 0 0 0.5rem;
 `
