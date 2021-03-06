@@ -21,6 +21,7 @@ const App = (): JSX.Element => {
         nextImage(images, -1, selectedImage)
         break;
       case 'Escape':
+        setSelectedImage(undefined);
         setShowLightBox(false);
         break;
     }

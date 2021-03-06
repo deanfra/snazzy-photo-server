@@ -2,16 +2,18 @@ import React from 'react'
 import styled from '@emotion/styled'
 
 type Props = {
-  children: JSX.Element
-  onClick: () => void
+  children: JSX.Element;
+  padding?: string;
+  onClick: () => void;
 }
 
-const Button = ({ children, onClick }: Props): JSX.Element => <StyledButton onClick={onClick}>{children}</StyledButton>
+const Button = ({ children, onClick, ...props }: Props): JSX.Element => 
+  <StyledButton onClick={onClick} {...props}>{children}</StyledButton>
 
 export default Button
 
-const StyledButton = styled('button')`
-  padding: 1em;
+const StyledButton = styled('button')<Props>`
+  padding: ${({padding}: Props) => `${padding}rem` || '1rem'};
   outline: none;
   border: none;
   background: none;

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { ReactChild } from 'react'
 import styled from '@emotion/styled'
+
+// type Children = JSX.Element | string | null
 
 type Props = {
   align?: string
-  children: JSX.Element | JSX.Element[] | string | string[] | null
+  children: ReactChild | ReactChild[]
   direction?: string
   flex?: string
   grow?: boolean

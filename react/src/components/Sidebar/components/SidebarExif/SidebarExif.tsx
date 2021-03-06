@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import Flex from 'components/Flex'
+import theme from 'components/theme'
 import ImageExif from 'interfaces/ImageExif'
 
 type Props = {exif: ImageExif;}
@@ -8,25 +9,20 @@ type ExifProps = {label: string; value: unknown;}
 
 const Exif = ({label, value}: ExifProps): JSX.Element | null => {
   return typeof value === 'object' ? null 
-  : <StyledExif>{label}: {value}</StyledExif>
+  : <StyledExif><strong>{label}</strong>: {value}</StyledExif>
 }
 
-const SidebarExif = ({ exif }: Props): JSX.Element => <StyledSidebarExif>
+const SidebarExif = ({ exif }: Props): JSX.Element => <StyledExifList>
     { Object.keys(exif).sort().map((key:string) => <Exif label={key} value={exif[key]} />) }
-  </StyledSidebarExif>
+  </StyledExifList>
 
 export default SidebarExif
 
-const StyledExif = styled('p')`
-  margin: 1rem 0 0;
+const StyledExifList = styled(Flex)`
+  background: ${theme.color.aeroBlue};
+  padding: 1rem 1.2rem;
+  font-size: 0.8rem;
 `
-
-const StyledSidebarExif = styled(Flex)`
-  position: fixed;
-  height: calc(100vh - 2rem);
-  margin: 5rem 1rem 1rem;
-  right: 0;
-  width: 20rem;
-  overflow-y: auto;
-  z-index: 3;
+const StyledExif = styled('p')`
+  margin: 0 0 0.5rem;
 `
