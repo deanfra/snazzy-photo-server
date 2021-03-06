@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import Header from 'components/Header'
-import ImageTile from 'components/ImageTile'
+import Thumb from 'components/Thumb'
 import Lightbox from 'components/Lightbox'
 import Loader from 'components/Loader'
 import Image from 'interfaces/Image'
@@ -60,12 +60,12 @@ const App = (): JSX.Element => {
     <div>
       <Header />
       <Lightbox show={showLightbox} image={selectedImage} toggle={setShowLightBox} />
-      {!images.length ? <Loader /> : <Tiles>{images.map((image) => ImageTile({ image, setSelectedImage }))}</Tiles>}
+      {!images.length ? <Loader /> : <Thumbs>{images.map((image) => <Thumb image={image} onClick={setSelectedImage} />)}</Thumbs>}
     </div>
   )
 }
 
-const Tiles = styled('div')`
+const Thumbs = styled('div')`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
