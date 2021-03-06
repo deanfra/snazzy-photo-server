@@ -16,24 +16,25 @@ const build = async () => {
     return
   }
 
-  console.time('build')
+  console.time('build finished')
 
-  console.time('find')
+  console.time('find finished')
   const all = findAllImages(dir)
-  console.timeEnd('find')
-  console.time('uuids')
+  console.timeEnd('find finished')
+  console.time('uuids finished')
   const uuids = all.map(getImageUuids)
-  console.timeEnd('uuids')
-  console.time('exif')
+  console.timeEnd('uuids finished')
+  console.time('exif finished')
   const exif = await Promise.all(uuids.map(getImageExif))
-  console.timeEnd('exif')
-  console.time('thumbs')
+  console.timeEnd('exif finished')
+  console.time('thumbs finished')
   const thumbs = exif.map(makeThumbnail)
-  console.timeEnd('thumbs')
-  console.time('insert')
+  console.timeEnd('thumbs finished')
+  console.time('insert finished')
   const inserts = Promise.all(thumbs.map(insertPhoto)).then(() => {
-    console.timeEnd('insert')
-    console.timeEnd('build')
+    console.timeEnd('insert finished')
+    console.log('-------------------------------')
+    console.timeEnd('build finished')
   })
 
   // const processed = findAllImages(dir).map(async (image) => {

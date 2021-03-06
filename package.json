@@ -4,9 +4,10 @@
   "description": "Just make be a darn tootin photo server",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build:react && npm run build && ts-node src/app.ts",
+    "start": "npm run clear && npm run build:react && npm run build && ts-node src/app.ts",
     "build": "ts-node src/build.ts",
     "build:react": "cd react && npm run build && cd ../",
+    "clear": "rm -rf src/thumbnails; find ./src -name 'db.json' -delete;",
     "test": "jest --testPathIgnorePatterns react",
     "lint": "eslint src --ext .ts --fix"
   },
