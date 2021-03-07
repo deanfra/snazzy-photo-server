@@ -38,6 +38,9 @@ export const insertPhoto = async ({ base, uuid, path, thumb, exif }: ImageProps)
 
   return image
 }
-export const fetchPhotos = (): Promise<ImageRow[]> => model().value()
+export const fetchPhotos = (offset = 0, pageSize = 50): Promise<ImageRow[]> =>
+  model()
+    .slice(offset, offset + pageSize)
+    .value()
 export const fetchPhotoById = (id: string): Promise<ImageRow> => model().find({ id }).value()
 export const fetchPhotoByPath = (path: string): Promise<ImageRow> => model().find({ path }).value()

@@ -7,8 +7,11 @@ const app = express()
 const port = 3000
 const dir = process.env['BASE_IMG_DIR'] || ''
 
-app.get('/images', (req, res) => {
-  const photos = fetchPhotos()
+type ImagesRequest = Request<null, ImageRow[], null, { offset?: number; page_size?: number }>
+
+app.get('/images', async (req: ImagesRequest, res) => {
+  const { offset, page_size } = req.query
+  const photos = await fetchPhotos(offset, page_size)
   res.send(photos)
 })
 
