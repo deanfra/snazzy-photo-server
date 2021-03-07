@@ -1,4 +1,5 @@
 import low from 'lowdb'
+import { statSync } from 'fs'
 import FileSync from 'lowdb/adapters/FileSync'
 import ImageExif from '../interfaces/ImageExif'
 import ImageRow from '../interfaces/ImageRow'
@@ -15,11 +16,19 @@ const model = () => db.get('photos')
 
 type ImageProps = { base: string; path: string; file: Buffer; uuid: string; thumb: string; exif: ImageExif }
 
-export const insertPhoto = async ({ base, uuid, path, thumb }: ImageProps): Promise<ImageRow> => {
+export const insertPhoto = async ({ base, uuid, path, thumb, exif }: ImageProps): Promise<ImageRow> => {
+  // refactor: move to controller
+  let image
   const handle = model()
   const relativePath = path.replace(base, '/images')
-  const data: ImageRow = { id: uuid, path: relativePath, thumb }
-  let image
+  const { birthtime } = statSync(path)
+
+  const data: ImageRow = {
+    id: uuid,
+    path: relativePath,
+    thumb,
+    createdDate: exif.CreateDate || birthtime.toISOString(),
+  }
 
   if (!fetchPhotoById(uuid)) {
     image = await handle.push(data).write()

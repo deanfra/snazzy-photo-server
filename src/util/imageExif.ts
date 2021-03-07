@@ -4,8 +4,8 @@ type ImageProps = { base: string; path: string; file: Buffer; uuid: string }
 import * as exifr from 'exifr'
 
 const imageExif = async ({ file, ...rest }: ImageProps): Promise<ImageWithExif> => {
-  const exif: ImageExif = await exifr.parse(file)
-  return { file, exif, ...rest }
+  const parsedExif: ImageExif = await exifr.parse(file)
+  return { file, exif: parsedExif || {}, ...rest }
 }
 
 export default imageExif

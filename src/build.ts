@@ -31,7 +31,8 @@ const build = async () => {
   const thumbs = exif.map(makeThumbnail)
   console.timeEnd('thumbs finished')
   console.time('insert finished')
-  const inserts = Promise.all(thumbs.map(insertPhoto)).then(() => {
+
+  Promise.all(thumbs.map(insertPhoto)).finally(() => {
     console.timeEnd('insert finished')
     console.log('-------------------------------')
     console.timeEnd('build finished')
