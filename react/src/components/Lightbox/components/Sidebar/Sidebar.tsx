@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Flex from 'components/Flex'
 import Button from 'components/Button'
 import Icon from 'components/Icon'
-import SidebarExif from './components/SidebarExif'
+import SidebarExif from '../SidebarExif'
 import Image from 'interfaces/Image'
 
 type Props = {

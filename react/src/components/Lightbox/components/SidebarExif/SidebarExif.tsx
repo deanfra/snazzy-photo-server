@@ -4,7 +4,7 @@ import Flex from 'components/Flex'
 import theme from 'components/theme'
 import ImageExif from 'interfaces/ImageExif'
 
-type Props = {exif: ImageExif;}
+type Props = {exif?: ImageExif;}
 type ExifProps = {label: string; value: unknown;}
 
 const Exif = ({label, value}: ExifProps): JSX.Element | null => {
@@ -13,7 +13,11 @@ const Exif = ({label, value}: ExifProps): JSX.Element | null => {
 }
 
 const SidebarExif = ({ exif }: Props): JSX.Element => <StyledExifList>
-    { Object.keys(exif).sort().map((key:string) => <Exif label={key} value={exif[key]} />) }
+    {
+      exif
+      ? Object.keys(exif).sort().map((key:string) => <Exif key={key} label={key} value={exif[key]} />)
+      : 'No exif data found'
+    }
   </StyledExifList>
 
 export default SidebarExif

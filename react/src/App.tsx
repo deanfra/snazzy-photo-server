@@ -5,44 +5,23 @@ import Thumb from 'components/Thumb'
 import Lightbox from 'components/Lightbox'
 import Loader from 'components/Loader'
 import Image from 'interfaces/Image'
+import Pagination from 'components/Pagination'
+import Gallery from 'components/Gallery'
 
 const App = (): JSX.Element => {
   const [images, setImages] = useState<Image[]>([])
   const [showLightbox, setShowLightBox] = useState<boolean>(false)
-  const [selectedImage, setSelectedImage] = useState<Image>()
-
-  const w = window as any
-  w.onkeyup = (({code}: KeyboardEvent) => {
-    switch (code) {
-      case 'ArrowRight':
-        nextImage(images, 1, selectedImage)
-        break;
-      case 'ArrowLeft':
-        nextImage(images, -1, selectedImage)
-        break;
-      case 'Escape':
-        setSelectedImage(undefined);
-        setShowLightBox(false);
-        break;
-    }
-  })
-
-  const nextImage = (images: Image[], increment:number, selectedImage?: Image): void => {
-    if(selectedImage) {
-      setSelectedImage(imageIncrement(increment, selectedImage, images))
-    }
-  }
-
-  const imageIncrement = (increment: number, selectedImage: Image, images: Image[]): Image => {
-    const currentIndex = images.indexOf(selectedImage)
-    return images[currentIndex + increment] || images[currentIndex]
-  }
+  const [selectedImage, setSelectedImage] = useState<Image|undefined>()
+  const [page, setPage] = useState<number>(0)
+  const [pageSize, setPageSize] = useState<number>(10)
 
   useEffect(() => {
-    fetch('/images')
+    const currentPage = page * pageSize
+    fetch(`/images?offset=${currentPage}&page_size=${pageSize}`)
       .then((res) => res.json())
-      .then(setImages)
-  }, [])
+      .then(loadedImages => {console.log(loadedImages); return loadedImages})
+      .then(loadedImages => setImages(loadedImages))
+  }, [pageSize])
 
   useEffect(() => {
     if (selectedImage) {
@@ -56,19 +35,22 @@ const App = (): JSX.Element => {
     }
   }, [showLightbox])
 
+
   return (
     <div>
       <Header />
       <Lightbox show={showLightbox} image={selectedImage} toggle={setShowLightBox} />
-      {!images.length ? <Loader /> : <Thumbs>{images.map((image) => <Thumb image={image} onClick={setSelectedImage} />)}</Thumbs>}
+      <Gallery
+        images={images}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        selectedImage={selectedImage}
+        setShowLightBox={setShowLightBox}
+        setSelectedImage={setSelectedImage}
+      />
     </div>
   )
 }
 
-const Thumbs = styled('div')`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-`
 
 export default App

@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { ReactChild } from 'react'
 import styled from '@emotion/styled'
 
 type Props = {
-  children: JSX.Element;
+  children: ReactChild | ReactChild[];
   padding?: string;
   onClick: () => void;
 }

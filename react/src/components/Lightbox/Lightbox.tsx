@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Flex from 'components/Flex'
 import Image from 'interfaces/Image'
 import Loader from 'components/Loader'
-import Sidebar from 'components/Sidebar'
+import Sidebar from 'components/Lightbox/components/Sidebar'
 import theme from 'components/theme'
 
 type Props = {
