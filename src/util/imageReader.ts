@@ -1,5 +1,5 @@
-import * as fs from 'fs'
+import { readFileSync } from 'fs'
 
-const reader = (path: string): Buffer => fs.readFileSync(path)
+const reader = (path: string): Buffer => readFileSync(path)
 
 export default reader

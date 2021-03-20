@@ -1,4 +1,4 @@
-import * as fs from 'fs'
+import { readdirSync, statSync } from 'fs'
 import imageReader from './imageReader'
 
 const extensions = ['ai', 'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'heic', 'heif', 'svg', 'tif', 'tiff']
@@ -14,8 +14,8 @@ const findAllImages = (basePath: string, arrayOfFiles: Image[] = []): Image[] =>
   const originalDirectory = basePath
 
   const findAllIn = (basePath: string, arrayOfFiles: Image[] = []): Image[] => {
-    fs.readdirSync(basePath).forEach((filePath) => {
-      const isDirectory = fs.statSync(basePath + '/' + filePath).isDirectory()
+    readdirSync(basePath).forEach((filePath) => {
+      const isDirectory = statSync(basePath + '/' + filePath).isDirectory()
       const fullImagePath = basePath + '/' + filePath
 
       if (isDirectory) {

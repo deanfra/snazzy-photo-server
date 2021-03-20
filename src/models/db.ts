@@ -5,7 +5,7 @@ const adapter = new FileSync('./src/models/db.json')
 const db = lowdb(adapter)
 
 db.defaults({
-  folders: [],
+  album: [],
   photos: [],
   tags: [],
   people: [],

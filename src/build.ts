@@ -1,8 +1,9 @@
 import findAllImages from './util/imageFinder'
 import makeThumbnail from './util/imageThumbnail'
-import { insertPhoto } from './models/image'
+import models from './models/'
 import getImageUuids from './util/imageUuid'
 import getImageExif from './util/imageExif'
+import imageTagger from './util/imageTagger'
 
 const dir = process.env['BASE_IMG_DIR'] || ''
 
@@ -21,18 +22,25 @@ const build = async () => {
   console.time('find finished')
   const all = findAllImages(dir)
   console.timeEnd('find finished')
+
   console.time('uuids finished')
   const uuids = all.map(getImageUuids)
   console.timeEnd('uuids finished')
+
   console.time('exif finished')
   const exif = await Promise.all(uuids.map(getImageExif))
   console.timeEnd('exif finished')
-  console.time('thumbs finished')
-  const thumbs = exif.map(makeThumbnail)
-  console.timeEnd('thumbs finished')
-  console.time('insert finished')
 
-  Promise.all(thumbs.map(insertPhoto)).finally(() => {
+  console.time('thumbs finished')
+  const thumbs = await Promise.all(exif.map(makeThumbnail))
+  console.timeEnd('thumbs finished')
+
+  console.time('tags finished')
+  const tags = await Promise.all(thumbs.map(imageTagger))
+  console.timeEnd('tags finished')
+
+  console.time('insert finished')
+  Promise.all(tags.map(models.image.insert)).finally(() => {
     console.timeEnd('insert finished')
     console.log('-------------------------------')
     console.timeEnd('build finished')

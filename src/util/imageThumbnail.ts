@@ -1,5 +1,5 @@
 import sharp from 'sharp'
-import * as fs from 'fs'
+import { existsSync, mkdirSync } from 'fs'
 import * as path from 'path'
 import { uuidPrefixed } from './uuid'
 import ImageExif from '../interfaces/ImageExif'
@@ -14,12 +14,12 @@ const imageThumbnail = ({ uuid, file, ...rest }: ImageProps): ImageWithThumb => 
   const thumbPathName = `${uuidPrefix}/${uuidRest}.jpg`
   const fileLocation = thumbPath + thumbPathName
 
-  if (!fs.existsSync(thumbPath)) {
-    fs.mkdirSync(thumbPath)
+  if (!existsSync(thumbPath)) {
+    mkdirSync(thumbPath)
   }
 
-  if (!fs.existsSync(thumbPath + uuidPrefix)) {
-    fs.mkdirSync(thumbPath + uuidPrefix)
+  if (!existsSync(thumbPath + uuidPrefix)) {
+    mkdirSync(thumbPath + uuidPrefix)
   }
 
   sharp(file)
