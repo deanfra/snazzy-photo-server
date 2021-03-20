@@ -8,7 +8,7 @@ type Props = {
   order?: number
 }
 
-const insertAlbum = (model: any) => async ({ name, parentId, order }: Props): Promise<AlbumRow> => {
+const insertAlbum = (model: LowDBModel<AlbumRow>) => async ({ name, parentId, order }: Props): Promise<AlbumRow> => {
   const id = uuidv4()
 
   const data: AlbumRow = {

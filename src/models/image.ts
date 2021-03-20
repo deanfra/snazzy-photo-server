@@ -13,7 +13,13 @@ type ImageProps = {
   uuid: string
 }
 
-const insertImage = (model: any) => async ({ base, uuid, path, thumb, createdDate }: ImageProps): Promise<ImageRow> => {
+const insertImage = (model: LowDBModel<ImageRow>) => async ({
+  base,
+  uuid,
+  path,
+  thumb,
+  createdDate,
+}: ImageProps): Promise<ImageRow> => {
   // refactor: move to controller
   const relativePath = path.replace(base, '/images')
   const data: ImageRow = {
