@@ -4,33 +4,39 @@ import AlbumRow from '../interfaces/AlbumRow'
 
 type Props = {
   name: string
-  parentId?: string
+  parentId?: string | null
   order?: number
 }
 
-const insertAlbum = (model: LowDBModel<AlbumRow>) => async ({ name, parentId, order }: Props): Promise<AlbumRow> => {
+const insertAlbum = (model: LowDBModel<AlbumRow>) => ({ name, parentId = null, order }: Props): AlbumRow => {
   const id = uuidv4()
-
   const data: AlbumRow = {
     id,
-    parentId: parentId || null,
-    createdDate: new Date().toISOString(),
-    // updatedDate: new Date().toISOString(),
+    parentId,
+    createdDate: new Date().toISOString(), // refactor for upsert
+    updatedDate: new Date().toISOString(),
     name,
     order: order || null,
   }
 
-  if (!fetchAlbumByName(model)(name)) {
-    return await model.push(data).write()
+  const existing = fetchAlbumByName(model)(name, parentId)
+
+  if (!existing || existing.parentId !== parentId) {
+    model.push(data).write()
   } else {
-    return await model.find({ name }).assign(data).write()
+    data.id = existing.id
+    model.find({ name, parentId }).assign(data).write()
   }
+
+  return data
 }
 
-const fetchAlbums = (model: LowDBModel<AlbumRow[]>) => (): Promise<AlbumRow[]> => model.value()
-const fetchAlbumById = (model: LowDBModel<AlbumRow>) => (id: string): Promise<AlbumRow> => model.find({ id }).value()
-const fetchAlbumByName = (model: LowDBModel<AlbumRow>) => (name: string): Promise<AlbumRow> =>
-  model.find({ name }).value()
+const fetchAlbums = (model: LowDBModel<AlbumRow[]>) => (): AlbumRow[] => model.value()
+const fetchAlbumById = (model: LowDBModel<AlbumRow>) => (id: string): AlbumRow => model.find({ id }).value()
+
+// Parent ID allows subfolders of the same album name (2020 -> jan, 2021 -> jan)
+const fetchAlbumByName = (model: LowDBModel<AlbumRow>) => (name: string, parentId: string | null) =>
+  model.find({ name, parentId }).value()
 
 export default (db: LowDB) => {
   const model = db.get('albums')

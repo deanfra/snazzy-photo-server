@@ -36,20 +36,15 @@ const build = async () => {
   console.timeEnd('thumbs finished')
 
   console.time('tags finished')
-  const tags = await Promise.all(thumbs.map(imageTagger))
+  const tags = thumbs.map(imageTagger)
   console.timeEnd('tags finished')
 
   console.time('insert finished')
-  Promise.all(tags.map(models.image.insert)).finally(() => {
-    console.timeEnd('insert finished')
-    console.log('-------------------------------')
-    console.timeEnd('build finished')
-  })
+  const images = tags.map(models.image.insert)
+  console.timeEnd('insert finished')
+  console.timeEnd('build finished')
 
-  // const processed = findAllImages(dir).map(async (image) => {
-  //   await Promise.resolve(image).then(getImageUuids).then(getImageMeta).then(makeThumbnail).then(insertPhoto)
-  // })
-  // console.log('⚡︎', inserts.length, 'pictures processing')
+  console.log('⚡︎', images.length, 'pictures processed')
 }
 
 build()

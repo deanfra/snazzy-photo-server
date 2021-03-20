@@ -18,6 +18,7 @@ const insertImage = (model: LowDBModel<ImageRow>) => async ({
   uuid,
   path,
   thumb,
+  albums,
   createdDate,
 }: ImageProps): Promise<ImageRow> => {
   // refactor: move to controller
@@ -27,21 +28,25 @@ const insertImage = (model: LowDBModel<ImageRow>) => async ({
     path: relativePath,
     thumb,
     createdDate,
+    albums,
     // imageCreatedDate
     // updatedDate: new Date().toISOString(),
   }
 
-  if (!fetchImageById(model)(uuid)) {
-    return await model.push(data).write()
+  const existing = fetchImageById(model)(uuid)
+
+  if (!existing) {
+    model.push(data).write()
   } else {
-    return await model.find({ id: uuid }).assign(data).write()
+    model.find({ id: uuid }).assign(data).write()
   }
+
+  return data
 }
-const fetchImages = (model: LowDBModel<ImageRow[]>) => (offset = 0, pageSize = 50): Promise<ImageRow[]> =>
+const fetchImages = (model: LowDBModel<ImageRow[]>) => (offset = 0, pageSize = 50): ImageRow[] =>
   model.slice(offset, offset + pageSize).value()
-const fetchImageById = (model: LowDBModel<ImageRow>) => (id: string): Promise<ImageRow> => model.find({ id }).value()
-const fetchImageByName = (model: LowDBModel<ImageRow>) => (path: string): Promise<ImageRow> =>
-  model.find({ path }).value()
+const fetchImageById = (model: LowDBModel<ImageRow>) => (id: string): ImageRow => model.find({ id }).value()
+const fetchImageByName = (model: LowDBModel<ImageRow>) => (path: string): ImageRow => model.find({ path }).value()
 
 export default (db: LowDB) => {
   const model = db.get('photos')
