@@ -12,8 +12,11 @@ const Thumb = ({ image, onClick }: Props): JSX.Element => (
   <StyledThumb key={image.id}>
     <Link
       tabIndex={0}
-      onKeyUp={(e) => {e.keyCode === 13 ? onClick(image) : false}}
-      onClick={() => onClick(image)}>
+      onKeyUp={(e) => {
+        e.keyCode === 13 ? onClick(image) : false
+      }}
+      onClick={() => onClick(image)}
+    >
       <img src={image.thumb} />
     </Link>
   </StyledThumb>

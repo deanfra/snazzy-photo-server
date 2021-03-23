@@ -22,7 +22,9 @@ const Lightbox = ({ image, show, toggle }: Props): JSX.Element => {
       fetch(`/image/${image.id}`)
         .then((res) => res.json())
         .then((res: Image) => setImageDetails(res))
-        .finally(() => { setLoading(false) })
+        .finally(() => {
+          setLoading(false)
+        })
     }
   }, [image])
 
@@ -30,7 +32,7 @@ const Lightbox = ({ image, show, toggle }: Props): JSX.Element => {
     <Wrapper data-testid="lightbox-wrapper" show={show}>
       <Flex direction="row">
         <ImageWrapper data-testid="image-wrapper" grow width="100vw">
-          { loading ? <Loader /> : <Image src={image?.path} />}
+          {loading ? <Loader /> : <Image src={image?.path} />}
         </ImageWrapper>
         <Sidebar data-testid="sidebar" close={toggle} imageDetails={imageDetails} />
       </Flex>

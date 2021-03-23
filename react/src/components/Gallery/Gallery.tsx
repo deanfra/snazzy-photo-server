@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Dispatch, SetStateAction} from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import styled from '@emotion/styled'
 import Loader from 'components/Loader'
 import Image from 'interfaces/Image'
@@ -14,26 +14,32 @@ type Props = {
   setShowLightBox: Dispatch<SetStateAction<boolean>>
 }
 
-const Gallery = ({images, pageSize, setPageSize, selectedImage, setSelectedImage, setShowLightBox}: Props): JSX.Element => {
-
+const Gallery = ({
+  images,
+  pageSize,
+  setPageSize,
+  selectedImage,
+  setSelectedImage,
+  setShowLightBox,
+}: Props): JSX.Element => {
   const w = window as any
-  w.onkeyup = (({code}: KeyboardEvent) => {
+  w.onkeyup = ({ code }: KeyboardEvent) => {
     switch (code) {
       case 'ArrowRight':
         nextImage(images, 1, selectedImage)
-        break;
+        break
       case 'ArrowLeft':
         nextImage(images, -1, selectedImage)
-        break;
+        break
       case 'Escape':
-        setSelectedImage(undefined);
-        setShowLightBox(false);
-        break;
+        setSelectedImage(undefined)
+        setShowLightBox(false)
+        break
     }
-  })
+  }
 
-  const nextImage = (images: Image[], increment:number, selectedImage?: Image): void => {
-    if(selectedImage) {
+  const nextImage = (images: Image[], increment: number, selectedImage?: Image): void => {
+    if (selectedImage) {
       setSelectedImage(imageIncrement(increment, selectedImage, images))
     }
   }
@@ -43,18 +49,22 @@ const Gallery = ({images, pageSize, setPageSize, selectedImage, setSelectedImage
     return images[currentIndex + increment] || images[currentIndex]
   }
 
-  return <div>
-    {!images.length
-      ? <Loader />
-      : (<>
+  return (
+    <div>
+      {!images.length ? (
+        <Loader />
+      ) : (
+        <>
           <ThumbsWrapper>
-            {images.map((image) => <Thumb key={`thumb-${image.id}`} image={image} onClick={setSelectedImage} />)}
+            {images.map((image) => (
+              <Thumb key={`thumb-${image.id}`} image={image} onClick={setSelectedImage} />
+            ))}
           </ThumbsWrapper>
           <Pagination pageSize={pageSize} setPageSize={setPageSize} />
-        </>)
-    }
-  </div>
-  
+        </>
+      )}
+    </div>
+  )
 }
 
 export default Gallery

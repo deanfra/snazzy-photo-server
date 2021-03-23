@@ -21,11 +21,15 @@ const Sidebar = ({ close, imageDetails }: Props): JSX.Element => (
     {imageDetails ? (
       <StyledSidebarInner>
         <Flex>
-          <p><strong>Path:</strong> {imageDetails.path.replace('/images/', '')}</p>
+          <p>
+            <strong>Path:</strong> {imageDetails.path.replace('/images/', '')}
+          </p>
         </Flex>
         <SidebarExif exif={imageDetails.exif} />
       </StyledSidebarInner>
-    ) : <p/>}
+    ) : (
+      <p />
+    )}
   </StyledSidebar>
 )
 
